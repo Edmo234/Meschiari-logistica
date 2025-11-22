@@ -21,6 +21,7 @@ export type Database = {
           delivery_address: string
           delivery_person_id: string | null
           description: string
+          empresa_id: string | null
           id: string
           pickup_address: string
           status: string
@@ -32,6 +33,7 @@ export type Database = {
           delivery_address: string
           delivery_person_id?: string | null
           description: string
+          empresa_id?: string | null
           id?: string
           pickup_address: string
           status?: string
@@ -43,6 +45,7 @@ export type Database = {
           delivery_address?: string
           delivery_person_id?: string | null
           description?: string
+          empresa_id?: string | null
           id?: string
           pickup_address?: string
           status?: string
@@ -59,6 +62,13 @@ export type Database = {
           {
             foreignKeyName: "orders_delivery_person_id_fkey"
             columns: ["delivery_person_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_empresa_id_fkey"
+            columns: ["empresa_id"]
             isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
@@ -106,7 +116,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      user_type: "cliente" | "entregador"
+      user_type: "cliente" | "empresa"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -234,7 +244,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      user_type: ["cliente", "entregador"],
+      user_type: ["cliente", "empresa"],
     },
   },
 } as const
