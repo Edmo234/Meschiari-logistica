@@ -22,7 +22,12 @@ const Index = () => {
         .single();
 
       if (profile) {
-        navigate(profile.user_type === "cliente" ? "/cliente" : "/entregador");
+        const routes = {
+          cliente: "/cliente",
+          empresa: "/empresa",
+          entregador: "/entregador"
+        };
+        navigate(routes[profile.user_type as keyof typeof routes]);
       }
     }
   };
@@ -31,25 +36,37 @@ const Index = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-secondary/5 p-4">
       <div className="text-center max-w-4xl">
         <div className="mb-12">
-          <h1 className="text-6xl font-bold text-primary mb-4">🍔 DeliveryApp</h1>
+          <h1 className="text-6xl font-bold text-primary mb-4">🚚 Meschiari Logistica</h1>
           <p className="text-2xl text-muted-foreground mb-2">
             Entregas rápidas e seguras
           </p>
           <p className="text-lg text-muted-foreground">
-            Conectando clientes e entregadores
+            Conectando empresas, clientes e entregadores
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
           <Card className="hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="text-2xl">👤 Para Clientes</CardTitle>
-              <CardDescription>Faça pedidos de entrega com facilidade</CardDescription>
+              <CardDescription>Receba suas entregas com facilidade</CardDescription>
             </CardHeader>
             <CardContent className="text-left space-y-2">
-              <p>✓ Crie pedidos rapidamente</p>
               <p>✓ Acompanhe suas entregas</p>
               <p>✓ Histórico completo</p>
+              <p>✓ Notificações em tempo real</p>
+            </CardContent>
+          </Card>
+
+          <Card className="hover:shadow-lg transition-shadow">
+            <CardHeader>
+              <CardTitle className="text-2xl">🏢 Para Empresas</CardTitle>
+              <CardDescription>Gerencie suas solicitações</CardDescription>
+            </CardHeader>
+            <CardContent className="text-left space-y-2">
+              <p>✓ Crie solicitações de entrega</p>
+              <p>✓ Acompanhe status</p>
+              <p>✓ Controle total</p>
             </CardContent>
           </Card>
 

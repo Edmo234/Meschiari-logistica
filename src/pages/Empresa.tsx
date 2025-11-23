@@ -140,7 +140,7 @@ const Empresa = () => {
       <div className="container mx-auto p-4 max-w-6xl">
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-primary">🏢 DeliveryApp</h1>
+            <h1 className="text-4xl font-bold text-primary">🚚 Meschiari Logistica</h1>
             <p className="text-muted-foreground mt-2">Bem-vindo, {profile?.name}!</p>
           </div>
           <Button variant="outline" onClick={handleLogout}>
