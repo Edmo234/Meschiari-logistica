@@ -16,7 +16,7 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [userType, setUserType] = useState<"cliente" | "entregador">("cliente");
+  const [userType, setUserType] = useState<"cliente" | "empresa" | "entregador">("cliente");
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,7 +39,12 @@ const Auth = () => {
             .single();
 
           if (profile) {
-            navigate(profile.user_type === "cliente" ? "/cliente" : "/entregador");
+            const routes = {
+              cliente: "/cliente",
+              empresa: "/empresa",
+              entregador: "/entregador"
+            };
+            navigate(routes[profile.user_type as keyof typeof routes]);
           }
         }
       } else {
@@ -69,7 +74,12 @@ const Auth = () => {
           if (profileError) throw profileError;
 
           toast.success("Cadastro realizado com sucesso!");
-          navigate(userType === "cliente" ? "/cliente" : "/entregador");
+          const routes = {
+            cliente: "/cliente",
+            empresa: "/empresa",
+            entregador: "/entregador"
+          };
+          navigate(routes[userType]);
         }
       }
     } catch (error: any) {
@@ -121,7 +131,13 @@ const Auth = () => {
                     <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
                       <RadioGroupItem value="cliente" id="cliente" />
                       <Label htmlFor="cliente" className="cursor-pointer flex-1">
-                        Cliente - Fazer pedidos
+                        Cliente - Receber entregas
+                      </Label>
+                    </div>
+                    <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
+                      <RadioGroupItem value="empresa" id="empresa" />
+                      <Label htmlFor="empresa" className="cursor-pointer flex-1">
+                        Empresa - Solicitar entregas
                       </Label>
                     </div>
                     <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">

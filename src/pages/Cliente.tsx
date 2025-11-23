@@ -11,12 +11,8 @@ import { Badge } from "@/components/ui/badge";
 
 const Cliente = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
   const [orders, setOrders] = useState<any[]>([]);
   const [profile, setProfile] = useState<any>(null);
-  const [pickupAddress, setPickupAddress] = useState("");
-  const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [description, setDescription] = useState("");
 
   useEffect(() => {
     checkAuth();
@@ -66,43 +62,6 @@ const Cliente = () => {
     }
   };
 
-  const handleCreateOrder = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("Não autenticado");
-
-      const { data: profileData } = await supabase
-        .from("profiles")
-        .select("id")
-        .eq("user_id", user.id)
-        .single();
-
-      if (!profileData) throw new Error("Perfil não encontrado");
-
-      const { error } = await supabase.from("orders").insert({
-        customer_id: profileData.id,
-        pickup_address: pickupAddress,
-        delivery_address: deliveryAddress,
-        description,
-        status: "pending",
-      });
-
-      if (error) throw error;
-
-      toast.success("Pedido criado com sucesso!");
-      setPickupAddress("");
-      setDeliveryAddress("");
-      setDescription("");
-      loadOrders();
-    } catch (error: any) {
-      toast.error(error.message || "Erro ao criar pedido");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -132,65 +91,16 @@ const Cliente = () => {
           </Button>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
+        <Card className="max-w-4xl mx-auto">
             <CardHeader>
-              <CardTitle>Novo Pedido</CardTitle>
-              <CardDescription>Crie um novo pedido de entrega</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleCreateOrder} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="pickup">Endereço de Coleta</Label>
-                  <Input
-                    id="pickup"
-                    placeholder="Rua, número, bairro..."
-                    value={pickupAddress}
-                    onChange={(e) => setPickupAddress(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="delivery">Endereço de Entrega</Label>
-                  <Input
-                    id="delivery"
-                    placeholder="Rua, número, bairro..."
-                    value={deliveryAddress}
-                    onChange={(e) => setDeliveryAddress(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Descrição do Pedido</Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Descreva o que será entregue..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    required
-                    rows={4}
-                  />
-                </div>
-
-                <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Criando..." : "Criar Pedido"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Meus Pedidos</CardTitle>
-              <CardDescription>Acompanhe seus pedidos</CardDescription>
+            <CardTitle>Minhas Entregas</CardTitle>
+            <CardDescription>Acompanhe suas entregas</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4 max-h-[600px] overflow-y-auto">
                 {orders.length === 0 ? (
                   <p className="text-center text-muted-foreground py-8">
-                    Nenhum pedido ainda
+                    Nenhuma entrega ainda
                   </p>
                 ) : (
                   orders.map((order) => (
@@ -214,8 +124,7 @@ const Cliente = () => {
                 )}
               </div>
             </CardContent>
-          </Card>
-        </div>
+        </Card>
       </div>
     </div>
   );
