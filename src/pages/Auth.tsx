@@ -39,6 +39,13 @@ const Auth = () => {
             .single();
 
           if (profile) {
+            // Verificar se o tipo de conta corresponde ao selecionado
+            if (profile.user_type !== userType) {
+              toast.error(`Esta conta é do tipo ${profile.user_type}. Por favor, selecione o tipo correto.`);
+              await supabase.auth.signOut();
+              return;
+            }
+
             const routes = {
               cliente: "/cliente",
               empresa: "/empresa",
@@ -124,31 +131,35 @@ const Auth = () => {
                     onChange={(e) => setPhone(e.target.value)}
                   />
                 </div>
-
-                <div className="space-y-3">
-                  <Label>Tipo de conta</Label>
-                  <RadioGroup value={userType} onValueChange={(value: any) => setUserType(value)}>
-                    <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
-                      <RadioGroupItem value="cliente" id="cliente" />
-                      <Label htmlFor="cliente" className="cursor-pointer flex-1">
-                        Cliente - Receber entregas
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
-                      <RadioGroupItem value="empresa" id="empresa" />
-                      <Label htmlFor="empresa" className="cursor-pointer flex-1">
-                        Empresa - Solicitar entregas
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
-                      <RadioGroupItem value="entregador" id="entregador" />
-                      <Label htmlFor="entregador" className="cursor-pointer flex-1">
-                        Entregador - Realizar entregas
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </div>
               </>
+            )}
+
+            <div className="space-y-3">
+              <Label>Tipo de conta</Label>
+              <RadioGroup value={userType} onValueChange={(value: any) => setUserType(value)}>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="cliente" id="cliente" />
+                  <Label htmlFor="cliente" className="cursor-pointer flex-1">
+                    Cliente - Receber entregas
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="empresa" id="empresa" />
+                  <Label htmlFor="empresa" className="cursor-pointer flex-1">
+                    Empresa - Solicitar entregas
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2 border rounded-lg p-3 hover:bg-accent cursor-pointer">
+                  <RadioGroupItem value="entregador" id="entregador" />
+                  <Label htmlFor="entregador" className="cursor-pointer flex-1">
+                    Entregador - Realizar entregas
+                  </Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {!isLogin && (
+              <></>
             )}
 
             <div className="space-y-2">
